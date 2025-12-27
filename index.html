@@ -3,103 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HeadHunter - Radar: Ловим трендовые скиллы и собираем вакансии в реальном времени</title>
+    <title>HeadHunter - Radar: Аналитика рынка труда для любой профессии</title>
+    <!-- Подключаем шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary: #e53e3e;
-            --secondary: #c53030;
-            --accent: #f56565;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --primary: #ff4757; 
+            --primary-glow: rgba(255, 71, 87, 0.4);
+            --secondary: #2f3542;
+            --accent: #5352ed;
+            --dark: #0a0e17; 
+            --surface: rgba(30, 41, 59, 0.6);
+            --light: #f1f2f6;
+            --success: #2ed573;
+            --warning: #ffa502;
+            
+            --radar-size: 500px; 
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            background-color: var(--dark);
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             color: var(--light);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
-            position: relative;
             min-height: 100vh;
         }
         
-        /* Floating Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+        h1, h2, h3, .logo, .chart-value, .ticker-salary, .step-number {
+            font-family: 'Orbitron', sans-serif; 
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header / Hero Section --- */
+        header {
+            position: relative;
+            padding: 2rem 0 4rem;
             overflow: hidden;
         }
-        
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(229, 62, 62, 0.3);
-            animation: float 15s infinite linear;
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
         }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-1000px) translateX(1000px) rotate(720deg);
-                opacity: 0;
-            }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        
-        /* Radar Visualization */
-        .radar-container {
+
+        .logo i {
+            color: var(--primary);
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+            min-height: 70vh;
+        }
+
+        .hero-text {
+            flex: 1;
+            z-index: 10;
+        }
+
+        .hero-visual {
+            flex: 1;
             display: flex;
             justify-content: center;
-            margin: 2rem 0;
+            position: relative;
         }
-        
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #a4b0be);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        h1 span {
+            color: var(--primary);
+            -webkit-text-fill-color: var(--primary);
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #ced6e0;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            font-weight: 300;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px var(--primary-glow);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--primary-glow);
+            background: #ff6b81;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- RADAR --- */
+        .radar-container {
+            perspective: 1000px;
+        }
+
         .radar {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: var(--radar-size);
+            height: var(--radar-size);
             border-radius: 50%;
-            background: rgba(30, 41, 59, 0.5);
-            border: 2px solid rgba(229, 62, 62, 0.3);
+            background: 
+                radial-gradient(circle at center, transparent 0%, transparent 95%, rgba(255, 71, 87, 0.2) 100%),
+                linear-gradient(rgba(255, 71, 87, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 71, 87, 0.1) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+            background-position: center;
+            border: 2px solid rgba(255, 71, 87, 0.5);
+            box-shadow: 
+                0 0 50px rgba(255, 71, 87, 0.1),
+                inset 0 0 50px rgba(255, 71, 87, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(229, 62, 62, 0.2);
+            transition: transform 0.1s ease-out;
         }
-        
+
+        .radar::before { width: 100%; height: 1px; top: 50%; position: absolute; background: rgba(255, 71, 87, 0.3); content: ''; }
+        .radar::after { height: 100%; width: 1px; left: 50%; position: absolute; background: rgba(255, 71, 87, 0.3); content: ''; }
+
         .radar-circle {
             position: absolute;
             border-radius: 50%;
-            border: 1px solid rgba(229, 62, 62, 0.2);
+            border: 1px dashed rgba(255, 71, 87, 0.3);
+            z-index: 1;
         }
-        
-        /* Radar Sweep Effect */
+
+        .radar-circle:nth-child(1) { width: 75%; height: 75%; border-style: solid; opacity: 0.5; }
+        .radar-circle:nth-child(2) { width: 50%; height: 50%; }
+        .radar-circle:nth-child(3) { width: 25%; height: 25%; }
+
         .radar-sweep {
             position: absolute;
             width: 50%;
             height: 2px;
-            background: linear-gradient(to right, transparent, rgba(229, 62, 62, 0.8), rgba(229, 62, 62, 1));
-            transform-origin: left center;
-            animation: radarSweep 3s linear infinite;
-            z-index: 10;
-            left: 50%;
+            background: linear-gradient(90deg, transparent, var(--primary));
             top: 50%;
+            left: 50%;
+            transform-origin: left center;
+            animation: radarSweep 4s infinite linear;
+            z-index: 5;
+            box-shadow: 0 0 20px var(--primary);
+        }
+        
+        .radar-sweep::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 0; height: 0;
+            box-shadow: 0 0 20px 5px var(--primary);
         }
         
         @keyframes radarSweep {
@@ -107,1282 +236,718 @@
             100% { transform: rotate(360deg); }
         }
         
-        .radar-circle:nth-child(1) {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .radar-circle-2 {
-            width: 66%;
-            height: 66%;
-        }
-        
-        .radar-circle-3 {
-            width: 33%;
-            height: 33%;
-        }
-        
-        .radar-center {
-            position: relative;
-            z-index: 2;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
+        .radar-pulse {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; height: 100%;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 10px;
-            box-shadow: 0 0 10px var(--primary);
-            animation: pulseCenter 2s infinite;
+            border: 1px solid var(--primary);
+            animation: pulseOut 3s infinite ease-out;
+            opacity: 0; z-index: 0;
         }
         
-        @keyframes pulseCenter {
-            0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+        @keyframes pulseOut {
+            0% { width: 100%; height: 100%; opacity: 0.5; }
+            100% { width: 140%; height: 140%; opacity: 0; }
         }
-        
+
         .radar-marker {
-            position: absolute;
-            z-index: 3;
+            position: absolute; z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: transform 0.3s;
         }
         
+        .radar-marker:hover { transform: scale(1.2); z-index: 20; }
+
         .marker-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 5px var(--accent);
-            animation: pulseMarker 1.5s infinite;
+            width: 12px; height: 12px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px var(--primary);
+            animation: blink 2s infinite;
         }
         
-        @keyframes pulseMarker {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.7); }
-            70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(245, 101, 101, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 101, 101, 0); }
+        .radar-marker.active .marker-dot {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success), 0 0 20px var(--success);
         }
-        
+
         .marker-label {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: #cbd5e1;
-            white-space: nowrap;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            padding: 2rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 1rem;
-        }
-
-        .logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            animation: pulse 2s infinite;
+            margin-top: 8px; font-size: 0.75rem;
+            color: #fff; background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px; border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap; font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px; opacity: 0.8; pointer-events: none;
         }
         
+        .radar-marker:hover .marker-label {
+            opacity: 1; background: var(--primary); border-color: var(--primary);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
         /* Salary Ticker */
-        .salary-ticker {
-            background: rgba(30, 41, 59, 0.7);
-            border-top: 1px solid rgba(229, 62, 62, 0.3);
-            border-bottom: 1px solid rgba(229, 62, 62, 0.3);
-            padding: 10px 0;
-            margin: 20px 0;
-            overflow: hidden;
-            position: relative;
+        .salary-ticker-wrapper {
+            background: rgba(0, 0, 0, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
         }
         
         .ticker-container {
             display: flex;
-            animation: ticker-scroll 30s linear infinite;
+            animation: ticker-scroll 40s linear infinite;
+            padding: 12px 0;
         }
         
         .ticker-item {
-            display: flex;
-            align-items: center;
-            margin-right: 50px;
-            white-space: nowrap;
+            display: flex; align-items: center;
+            margin-right: 60px; white-space: nowrap; font-size: 0.9rem;
         }
         
-        .ticker-role {
-            color: #cbd5e1;
-            margin-right: 10px;
-        }
-        
-        .ticker-salary {
-            color: var(--primary);
-            font-weight: bold;
-        }
-        
-        @keyframes ticker-scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
+        .ticker-role { color: #a4b0be; margin-right: 10px; }
+        .ticker-salary { color: var(--success); font-weight: 700; }
+        .ticker-change { font-size: 0.8em; margin-left: 5px; }
+        .up { color: var(--success); }
+        .down { color: var(--primary); }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #60a5fa, #38bdf8);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .subtitle {
-            font-size: 1.8rem;
-            color: #e2e8f0;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            font-weight: 400;
-            text-shadow: 0 0 10px rgba(229, 62, 62, 0.3);
-            letter-spacing: 0.5px;
-            animation: subtitleGlow 3s infinite alternate;
-        }
-        
-        @keyframes subtitleGlow {
-            0% { text-shadow: 0 0 10px rgba(229, 62, 62, 0.3); }
-            100% { text-shadow: 0 0 20px rgba(229, 62, 62, 0.6), 0 0 30px rgba(229, 62, 62, 0.4); }
-        }
-
-        /* Features Section */
-        .features {
-            padding: 5rem 0;
-        }
-
+        /* --- Sections --- */
         .section-title {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 3rem;
-            position: relative;
+            text-align: center; font-size: 2.5rem;
+            margin-bottom: 4rem; position: relative;
+            display: inline-block; left: 50%; transform: translateX(-50%);
         }
-
+        
         .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            margin: 15px auto;
-            border-radius: 2px;
+            content: ''; display: block; width: 60%; height: 3px;
+            background: var(--primary); margin: 10px auto 0;
+            box-shadow: 0 0 10px var(--primary);
         }
 
+        /* Features */
+        .features { padding: 5rem 0; }
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
         }
 
         .feature-card {
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            background: var(--surface);
+            border-radius: 12px; padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+            height: 100%;
         }
 
         .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary); opacity: 0; transition: opacity 0.3s;
         }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(40, 50, 70, 0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+        
+        .feature-card:hover::before { opacity: 1; }
 
         .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--secondary);
+            font-size: 1.8rem; color: var(--primary);
+            margin-bottom: 1.5rem; background: rgba(255, 71, 87, 0.1);
+            width: 50px; height: 50px; display: flex;
+            align-items: center; justify-content: center; border-radius: 8px;
         }
 
-        .feature-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #e2e8f0;
-        }
-
-        .feature-desc {
-            color: #94a3b8;
-            font-size: 1.1rem;
-        }
+        .feature-title { font-size: 1.3rem; margin-bottom: 1rem; color: #fff; }
+        .feature-desc { color: #a4b0be; font-size: 0.95rem; }
 
         /* How It Works */
         .how-it-works {
             padding: 5rem 0;
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.5);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .steps {
+        .steps-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-between;
             gap: 2rem;
-            margin-top: 3rem;
+            flex-wrap: wrap;
         }
 
-        .step {
+        .step-card {
             flex: 1;
             min-width: 250px;
-            max-width: 300px;
             text-align: center;
-            padding: 2rem;
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 15px;
             position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .step:hover {
-            background: rgba(56, 189, 248, 0.1);
-            transform: scale(1.05);
         }
 
         .step-number {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.1);
             font-weight: bold;
-            margin: 0 auto 1.5rem;
+            margin-bottom: -20px;
+            z-index: 0;
+            position: relative;
         }
 
-        .step-title {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            color: #e2e8f0;
+        .step-content {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            transition: transform 0.3s;
+        }
+        
+        .step-content:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
         }
 
-        .step-desc {
-            color: #94a3b8;
-        }
-
-        /* Benefits */
+        /* Benefits Section */
         .benefits {
             padding: 5rem 0;
         }
-
-        .benefits-container {
+        
+        .benefits-wrapper {
             display: flex;
             flex-wrap: wrap;
-            gap: 2rem;
+            gap: 4rem;
             align-items: center;
         }
-
-        .benefits-content {
+        
+        .benefits-list {
             flex: 1;
             min-width: 300px;
         }
-
-        .benefits-image {
-            flex: 1;
-            min-width: 300px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 15px;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .benefits-image::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent, 
-                rgba(255, 255, 255, 0.5), 
-                transparent 30%
-            );
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
-        }
-
-        .benefits-image-inner {
-            width: 90%;
-            height: 90%;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            color: var(--secondary);
-        }
-
-        .benefit-list {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
+        
         .benefit-item {
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
             display: flex;
-            align-items: center;
-        }
-
-        .benefit-item:last-child {
-            border-bottom: none;
-        }
-
-        .benefit-item i {
-            color: var(--success);
-            margin-right: 1rem;
-            font-size: 1.2rem;
-        }
-
-        /* CTA Section */
-        .cta {
-            padding: 5rem 0;
-            text-align: center;
-            background: rgba(15, 23, 42, 0.7);
-        }
-
-        .cta-title {
-            font-size: 2.5rem;
+            align-items: flex-start;
             margin-bottom: 1.5rem;
         }
-
-        .cta-desc {
-            max-width: 700px;
-            margin: 0 auto 2rem;
+        
+        .benefit-icon {
+            color: var(--success);
+            margin-right: 15px;
             font-size: 1.2rem;
-            color: #94a3b8;
+            margin-top: 4px;
         }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
+        
+        .benefit-text h4 {
+            color: #fff;
+            margin-bottom: 5px;
             font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .benefit-text p {
+            color: #a4b0be;
+            font-size: 0.95rem;
+        }
+        
+        .benefits-visual {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            background: radial-gradient(circle at center, rgba(255,71,87,0.1), transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        
+        .sheet-mockup {
+            width: 80%;
+            height: 80%;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: rotate(-5deg);
+            transition: transform 0.3s;
+        }
+        
+        .sheet-mockup:hover { transform: rotate(0deg) scale(1.05); }
+        
+        .sheet-line { height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; width: 100%; }
+        .sheet-line:nth-child(1) { width: 40%; background: var(--success); opacity: 0.5; }
+
+        /* Data Viz Section */
+        .data-viz {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .data-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: 2rem;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+        .dashboard-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .btn:active {
-            transform: translateY(0);
+        /* Heatmap */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 20px;
         }
+        
+        .h-cell {
+            aspect-ratio: 2/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+            transition: all 0.2s;
+            cursor: default;
+            text-align: center;
+            padding: 5px;
+            line-height: 1.2;
+        }
+        
+        .h-cell:hover { transform: scale(1.05); z-index: 2; box-shadow: 0 0 10px rgba(0,0,0,0.5); border: 1px solid #fff; }
+        
+        .lvl-1 { background: rgba(255, 71, 87, 0.2); color: #ccc; }
+        .lvl-2 { background: rgba(255, 71, 87, 0.4); }
+        .lvl-3 { background: rgba(255, 71, 87, 0.6); }
+        .lvl-4 { background: rgba(255, 71, 87, 0.8); }
+        .lvl-5 { background: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+
+        /* Region Map simplified */
+        .region-list { list-style: none; margin-top: 20px; }
+        
+        .region-item {
+            display: flex; justify-content: space-between;
+            padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .region-name i { margin-right: 10px; color: var(--primary); }
+        .region-val { font-weight: bold; color: var(--success); font-family: 'Orbitron', monospace; }
 
         /* Footer */
         footer {
             padding: 3rem 0;
             text-align: center;
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 4rem;
+            background: rgba(0,0,0,0.3);
         }
+        
+        .footer-cta { margin-bottom: 2rem; }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .footer-link {
-            color: #94a3b8;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--secondary);
-        }
-
-        .copyright {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .fade-in.appear {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Data Visualization */
-        .data-viz {
-            padding: 5rem 0;
-            background: rgba(15, 23, 42, 0.7);
-        }
-        
-        .data-viz-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 3rem;
-            justify-content: center;
-        }
-        
-        .chart-container {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .chart-placeholder {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            height: 200px;
-            margin-top: 2rem;
-            padding: 0 1rem;
-        }
-        
-        .chart-bar {
-            width: 40px;
-            position: relative;
-            border-radius: 5px 5px 0 0;
-            animation: growUp 1s ease-out forwards;
-            transform-origin: bottom;
-            transform: scaleY(0);
-        }
-        
-        @keyframes growUp {
-            to { transform: scaleY(1); }
-        }
-        
-        .skill-label {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-        
-        .skill-count {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-        
-        .pie-chart {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            position: relative;
-            margin: 2rem auto;
-            background: #e53e3e;
-            /* Fallback for browsers that don't support conic-gradient */
-            background: conic-gradient(
-                #e53e3e 0% 40%,
-                #c53030 40% 75%,
-                #f56565 75% 95%,
-                #f56565 95% 100%
-            );
-        }
-        
-        .pie-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: #0f172a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .pie-legend {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-        
-        .legend-color {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
-            margin-right: 10px;
-        }
-        
-        .color-1 { background: #e53e3e; }
-        .color-2 { background: #c53030; }
-        .color-3 { background: #f56565; }
-        .color-4 { background: #f56565; }
-        
-        /* Heatmap Styles */
-        .heatmap-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .heatmap-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .heatmap-cell {
-            width: 80px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 5px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .heatmap-cell:hover {
-            transform: scale(1.1);
-            z-index: 2;
-        }
-        
-        .heatmap-cell.low {
-            background: rgba(229, 62, 62, 0.3);
-        }
-        
-        .heatmap-cell.medium {
-            background: rgba(229, 62, 62, 0.6);
-        }
-        
-        .heatmap-cell.high {
-            background: rgba(229, 62, 62, 0.9);
-        }
-        
-        .heatmap-legend {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #cbd5e1;
-        }
-        
-        .legend-low:before, .legend-medium:before, .legend-high:before {
-            content: "";
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-        
-        .legend-low:before {
-            background: rgba(229, 62, 62, 0.3);
-        }
-        
-        .legend-medium:before {
-            background: rgba(229, 62, 62, 0.6);
-        }
-        
-        .legend-high:before {
-            background: rgba(229, 62, 62, 0.9);
-        }
-        
-        /* Multi-Chart Styles */
-        .multi-chart {
-            margin: 20px 0;
-        }
-        
-        .multi-chart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .chart-label {
-            width: 150px;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-        
-        .progress-bar {
-            flex: 1;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 0 10px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            border-radius: 5px;
-            transition: width 1s ease-in-out;
-        }
-        
-        .chart-value {
-            width: 40px;
-            text-align: right;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        /* Region Map Styles */
-        .region-map {
-            margin-top: 30px;
-        }
-        
-        .map-container {
-            position: relative;
-            height: 200px;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 10px;
-            margin-top: 15px;
-            overflow: hidden;
-        }
-        
-        .map-point {
-            position: absolute;
-            transform: translate(-50%, -50%);
-        }
-        
-        .point-dot {
-            width: 12px;
-            height: 12px;
-            background: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-            animation: pulse 2s infinite;
-        }
-        
-        .point-label {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: #cbd5e1;
-            text-align: center;
-            white-space: nowrap;
-        }
-        
-        .point-value {
-            display: block;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
         /* Responsive */
+        @media (max-width: 1024px) {
+            :root { --radar-size: 400px; }
+            h1 { font-size: 2.8rem; }
+            .hero-content { gap: 2rem; }
+            .benefits-wrapper { flex-direction: column; }
+        }
+
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
+            .hero-content {
+                flex-direction: column-reverse; 
+                text-align: center;
+                padding-top: 2rem;
             }
             
-            .subtitle {
-                font-size: 1.2rem;
-            }
+            .navbar { flex-direction: column; gap: 1rem; }
             
-            .section-title {
-                font-size: 1.8rem;
-            }
+            :root { --radar-size: 300px; }
             
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
+            .section-title::after { width: 100px; }
             
-            .benefits-container {
-                flex-direction: column;
-            }
+            .data-wrapper { grid-template-columns: 1fr; }
             
-            .heatmap-cell {
-                width: 60px;
-                height: 35px;
-                font-size: 0.6rem;
-            }
+            .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
             
-            .chart-label {
-                width: 120px;
-                font-size: 0.8rem;
-            }
+            .steps-container { flex-direction: column; }
+        }
+        
+        @keyframes ticker-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
     </style>
 </head>
 <body>
-    <!-- Floating Particles Background -->
-    <div class="particles" id="particles"></div>
-    
-    <!-- Header -->
+
+    <!-- Header / Hero -->
     <header>
         <div class="container">
-            <div class="logo-container">
+            <nav class="navbar">
                 <div class="logo">
-                    <i class="fas fa-radar"></i>
+                    <i class="fas fa-radar"></i> HH Radar
                 </div>
-            </div>
-            <h1>HeadHunter - Radar</h1>
-            <p class="subtitle">Анализируем трендовые скиллы и собираем вакансии в реальном времени</p>
-        </div>
-        
-        <!-- Salary Ticker -->
-        <div class="salary-ticker">
-            <div class="ticker-container">
-                <div class="ticker-item">
-                    <span class="ticker-role">Frontend Developer в Москве:</span>
-                    <span class="ticker-salary">180,000 ₽</span>
+                <!-- Только кнопка в Telegram -->
+                <a href="https://t.me/+dYrSdVlDfNM5ZTJi" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">
+                    <i class="fab fa-telegram-plane" style="margin-right: 8px;"></i> Получить шаблон
+                </a>
+            </nav>
+
+            <div class="hero-content">
+                <div class="hero-text fade-in-left">
+                    <h1>Аналитика рынка <br><span>для любой профессии</span></h1>
+                    <p class="subtitle">
+                        Автоматически собирает данные из вакансий HeadHunter. Узнайте реальные зарплаты, востребованные навыки и лучшие города для КАМов, HR, Маркетологов и руководителей.
+                    </p>
+                    <div class="btn-group">
+                        <a href="https://t.me/+dYrSdVlDfNM5ZTJi" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-telegram-plane"></i> Запустить Бота
+                        </a>
+                    </div>
                 </div>
-                <div class="ticker-item">
-                    <span class="ticker-role">Key Account Manager в Санкт-Петербурге:</span>
-                    <span class="ticker-salary">120,000 ₽</span>
+
+                <div class="hero-visual fade-in-right">
+                    <!-- ENHANCED RADAR -->
+                    <div class="radar-container">
+                        <div class="radar" id="radar">
+                            <div class="radar-pulse"></div>
+                            <div class="radar-pulse" style="animation-delay: 1s;"></div>
+                            
+                            <div class="radar-circle"></div>
+                            <div class="radar-circle"></div>
+                            <div class="radar-circle"></div>
+                            
+                            <div class="radar-center" style="width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff; z-index: 20;"></div>
+                            
+                            <div class="radar-sweep"></div>
+                            
+                            <!-- Markers (Universal Roles) -->
+                            <div class="radar-marker" style="top: 20%; left: 70%;">
+                                <div class="marker-dot"></div>
+                                <div class="marker-label">KAM / Sales</div>
+                            </div>
+                            
+                            <div class="radar-marker active" style="top: 75%; left: 80%;">
+                                <div class="marker-dot"></div>
+                                <div class="marker-label">HR Director</div>
+                            </div>
+                            
+                            <div class="radar-marker" style="top: 65%; left: 25%;">
+                                <div class="marker-dot"></div>
+                                <div class="marker-label">Закупки</div>
+                            </div>
+                            
+                            <div class="radar-marker" style="top: 30%; left: 20%;">
+                                <div class="marker-dot"></div>
+                                <div class="marker-label">Логистика</div>
+                            </div>
+                            
+                            <div class="radar-marker" style="top: 45%; left: 55%;">
+                                <div class="marker-dot" style="background: var(--warning);"></div>
+                                <div class="marker-label">CEO</div>
+                            </div>
+                            
+                             <div class="radar-marker" style="top: 85%; left: 45%;">
+                                <div class="marker-dot"></div>
+                                <div class="marker-label">Маркетинг</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ticker-item">
-                    <span class="ticker-role">BDM в Екатеринбурге:</span>
-                    <span class="ticker-salary">200,000 ₽</span>
-                </div>
-                <div class="ticker-item">
-                    <span class="ticker-role">CEO в Казани:</span>
-                    <span class="ticker-salary">350,000 ₽</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Radar Visualization -->
-        <div class="radar-container">
-            <div class="radar" id="radar">
-                <div class="radar-circle"></div>
-                <div class="radar-circle radar-circle-2"></div>
-                <div class="radar-circle radar-circle-3"></div>
-                <div class="radar-center">
-                    <i class="fas fa-search-location"></i>
-                </div>
-                
-                <!-- Job positions markers -->
-                <div class="radar-marker" style="top: 15%; left: 25%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">Key Account Manager</div>
-                </div>
-                <div class="radar-marker" style="top: 35%; left: 75%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">BDM</div>
-                </div>
-                <div class="radar-marker" style="top: 65%; left: 30%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">CEO</div>
-                </div>
-                <div class="radar-marker" style="top: 80%; left: 70%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">Менеджер по закупкам</div>
-                </div>
-                <div class="radar-marker" style="top: 25%; left: 60%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">HR-менеджер</div>
-                </div>
-                <div class="radar-marker" style="top: 50%; left: 15%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">Финансовый директор</div>
-                </div>
-                <div class="radar-marker" style="top: 70%; left: 50%;">
-                    <div class="marker-dot"></div>
-                    <div class="marker-label">Маркетолог</div>
-                </div>
-                
-                <!-- Radar Sweep Effect -->
-                <div class="radar-sweep"></div>
             </div>
         </div>
     </header>
 
-    <!-- Features Section -->
-    <section class="features">
+    <!-- Salary Ticker (Universal Roles) -->
+    <div class="salary-ticker-wrapper">
         <div class="container">
-            <h2 class="section-title fade-in">Функционал шаблона</h2>
+            <div class="ticker-container">
+                <!-- Duplicated items for infinite loop -->
+                <div class="ticker-item">
+                    <span class="ticker-role">KAM (Москва):</span>
+                    <span class="ticker-salary">250,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-role">HRD (Удаленно):</span>
+                    <span class="ticker-salary">180,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-role">CEO (Казань):</span>
+                    <span class="ticker-salary">350,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-role">Менеджер по закупкам:</span>
+                    <span class="ticker-salary">120,000 ₽ <i class="fas fa-minus ticker-change" style="color:#ccc"></i></span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-role">Коммерческий директор:</span>
+                    <span class="ticker-salary">400,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                
+                <!-- Repeat -->
+                <div class="ticker-item">
+                    <span class="ticker-role">KAM (Москва):</span>
+                    <span class="ticker-salary">250,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-role">HRD (Удаленно):</span>
+                    <span class="ticker-salary">180,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-role">CEO (Казань):</span>
+                    <span class="ticker-salary">350,000 ₽ <i class="fas fa-arrow-up up ticker-change"></i></span>
+                </div>
+                 <div class="ticker-item">
+                    <span class="ticker-role">Менеджер по закупкам:</span>
+                    <span class="ticker-salary">120,000 ₽ <i class="fas fa-minus ticker-change" style="color:#ccc"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features (Все 6 блоков) -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Функционал шаблона</h2>
             <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="feature-title">Анализ трендовых скиллов</h3>
-                    <p class="feature-desc">Автоматически собирает требуемые навыки из вакансий и показывает, на что обращают внимание HR при подборе кандидатов. Частотный анализ ключевых навыков для актуализации резюме.</p>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feature-title">Анализ скиллов</h3>
+                    <p class="feature-desc">Автоматически собирает требуемые навыки из вакансий. Узнайте, что сейчас требуют работодатели от вашей должности.</p>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-money-bill-wave"></i></div>
                     <h3 class="feature-title">Анализ зарплат</h3>
-                    <p class="feature-desc">Динамика зарплат в различных валютах (RUB, USD, EUR) с учетом минимальных и максимальных значений. Анализ средних значений по регионам.</p>
+                    <p class="feature-desc">Динамика зарплат в RUB, USD, EUR. Минимальные, средние и максимальные значения по рынку.</p>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-map-marker-alt"></i></div>
                     <h3 class="feature-title">Частотность по городам</h3>
-                    <p class="feature-desc">Географический анализ востребованности профессий. ТОП-10 городов с наибольшим количеством вакансий по выбранной специальности.</p>
+                    <p class="feature-desc">География спроса. ТОП-10 городов, где вашу профессию ищут чаще всего и платят больше.</p>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
                     <h3 class="feature-title">Частотность по опыту</h3>
-                    <p class="feature-desc">Анализ требований к опыту работы: стажер, junior, middle, senior, lead. Определение наиболее востребованных уровней квалификации.</p>
+                    <p class="feature-desc">Анализ требований к стажу: Junior, Middle, Senior. Поймите, на какой уровень вы претендуете.</p>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
-                        <i class="fab fa-telegram"></i>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fab fa-telegram"></i></div>
                     <h3 class="feature-title">Интеграция Telegram</h3>
-                    <p class="feature-desc">Получайте результаты анализа прямо в ваш Telegram-бот без необходимости заходить на сайт.</p>
+                    <p class="feature-desc">Получайте готовые PDF-отчеты и сводки прямо в свой Telegram-бот за секунды.</p>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
-                        <i class="fab fa-google-drive"></i>
-                    </div>
-                    <h3 class="feature-title">Google Sheets интеграция</h3>
-                    <p class="feature-desc">Все данные автоматически выгружаются в Google Таблицы для дальнейшей работы и анализа.</p>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fab fa-google-drive"></i></div>
+                    <h3 class="feature-title">Google Таблицы</h3>
+                    <p class="feature-desc">Вся сырая дата автоматически выгружается в удобную Google Таблицу для глубокого анализа.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
+    <!-- How It Works (Восстановлено) -->
     <section class="how-it-works">
         <div class="container">
-            <h2 class="section-title fade-in">Как это работает?</h2>
-            <div class="steps">
-                <div class="step fade-in">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Отправка запроса</h3>
-                    <p class="step-desc">Вы отправляете сообщение в Telegram-бот с названием интересующей профессии</p>
+            <h2 class="section-title">Как это работает?</h2>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Отправка запроса</h3>
+                        <p style="color: #a4b0be; margin-top: 10px;">Просто напишите название должности (например, "РОП" или "Маркетолог") в Telegram-бот.</p>
+                    </div>
                 </div>
-                
-                <div class="step fade-in">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Сбор данных</h3>
-                    <p class="step-desc">Система автоматически собирает вакансии с HeadHunter (количество зависит от параметров запроса)</p>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Сбор данных</h3>
+                        <p style="color: #a4b0be; margin-top: 10px;">Система сканирует сотни актуальных вакансий на HeadHunter в реальном времени.</p>
+                    </div>
                 </div>
-                
-                <div class="step fade-in">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Анализ</h3>
-                    <p class="step-desc">Анализ частотности скиллов, динамики зарплат в валютах, частотности городов и опыта работы</p>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Аналитика</h3>
+                        <p style="color: #a4b0be; margin-top: 10px;">Алгоритм выделяет ключевые навыки, считает медианную зарплату и строит графики.</p>
+                    </div>
                 </div>
-                
-                <div class="step fade-in">
-                    <div class="step-number">4</div>
-                    <h3 class="step-title">Результат</h3>
-                    <p class="step-desc">Вы получаете детальный отчет в Telegram и Google Таблицы</p>
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Результат</h3>
+                        <p style="color: #a4b0be; margin-top: 10px;">Вы получаете отчет в Telegram и заполненную Google Таблицу с данными.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Data Visualization -->
+    <!-- Data Viz Demo (Universal Content) -->
     <section class="data-viz">
         <div class="container">
-            <h2 class="section-title fade-in">Анализ данных HeadHunter</h2>
-            <div class="data-viz-container">
-                <!-- Skills Heatmap -->
-                <div class="chart-container fade-in">
-                    <h3>Тепловая карта востребованных навыков</h3>
-                    <div class="heatmap-container">
-                        <div class="heatmap-row">
-                            <div class="heatmap-cell high">Python</div>
-                            <div class="heatmap-cell medium">SQL</div>
-                            <div class="heatmap-cell low">Java</div>
-                            <div class="heatmap-cell high">React</div>
-                            <div class="heatmap-cell medium">Docker</div>
-                        </div>
-                        <div class="heatmap-row">
-                            <div class="heatmap-cell medium">Kubernetes</div>
-                            <div class="heatmap-cell high">Marketing</div>
-                            <div class="heatmap-cell low">Sales</div>
-                            <div class="heatmap-cell high">Finance</div>
-                            <div class="heatmap-cell medium">HR</div>
-                        </div>
-                        <div class="heatmap-row">
-                            <div class="heatmap-cell low">Design</div>
-                            <div class="heatmap-cell medium">Analytics</div>
-                            <div class="heatmap-cell high">Management</div>
-                            <div class="heatmap-cell medium">Strategy</div>
-                            <div class="heatmap-cell low">Legal</div>
-                        </div>
-                        <div class="heatmap-row">
-                            <div class="heatmap-cell high">Procurement</div>
-                            <div class="heatmap-cell medium">Logistics</div>
-                            <div class="heatmap-cell low">Support</div>
-                            <div class="heatmap-cell high">Business Development</div>
-                            <div class="heatmap-cell medium">Project Management</div>
-                        </div>
-                    </div>
-                    <div class="heatmap-legend">
-                        <span class="legend-low">Низкая востребованность</span>
-                        <span class="legend-medium">Средняя востребованность</span>
-                        <span class="legend-high">Высокая востребованность</span>
-                    </div>
-                </div>
+            <h2 class="section-title">Аналитика в действии</h2>
+            <div class="data-wrapper">
                 
-                <!-- Multi-Dimensional Analysis -->
-                <div class="chart-container fade-in">
-                    <h3>Мультианализ вакансий</h3>
-                    <div class="multi-chart">
-                        <div class="multi-chart-item">
-                            <div class="chart-label">IT & Tech</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 75%; background: linear-gradient(to right, #e53e3e, #c53030);"></div>
-                            </div>
-                            <div class="chart-value">75%</div>
-                        </div>
-                        <div class="multi-chart-item">
-                            <div class="chart-label">Sales & BD</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 60%; background: linear-gradient(to right, #e53e3e, #c53030);"></div>
-                            </div>
-                            <div class="chart-value">60%</div>
-                        </div>
-                        <div class="multi-chart-item">
-                            <div class="chart-label">Marketing</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 55%; background: linear-gradient(to right, #e53e3e, #c53030);"></div>
-                            </div>
-                            <div class="chart-value">55%</div>
-                        </div>
-                        <div class="multi-chart-item">
-                            <div class="chart-label">Finance & Accounting</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 45%; background: linear-gradient(to right, #e53e3e, #c53030);"></div>
-                            </div>
-                            <div class="chart-value">45%</div>
-                        </div>
-                        <div class="multi-chart-item">
-                            <div class="chart-label">HR & Recruitment</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 40%; background: linear-gradient(to right, #e53e3e, #c53030);"></div>
-                            </div>
-                            <div class="chart-value">40%</div>
-                        </div>
-                        <div class="multi-chart-item">
-                            <div class="chart-label">Operations & Procurement</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 35%; background: linear-gradient(to right, #e53e3e, #c53030);"></div>
-                            </div>
-                            <div class="chart-value">35%</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Interactive Region Map -->
-                    <div class="region-map">
-                        <h4>Географическое распределение</h4>
-                        <div class="map-container">
-                            <div class="map-point" style="top: 30%; left: 25%;">
-                                <div class="point-dot"></div>
-                                <div class="point-label">Москва<br><span class="point-value">35%</span></div>
-                            </div>
-                            <div class="map-point" style="top: 40%; left: 60%;">
-                                <div class="point-dot"></div>
-                                <div class="point-label">СПб<br><span class="point-value">25%</span></div>
-                            </div>
-                            <div class="map-point" style="top: 60%; left: 40%;">
-                                <div class="point-dot"></div>
-                                <div class="point-label">Екатеринбург<br><span class="point-value">15%</span></div>
-                            </div>
-                            <div class="map-point" style="top: 50%; left: 75%;">
-                                <div class="point-dot"></div>
-                                <div class="point-label">Новосибирск<br><span class="point-value">12%</span></div>
-                            </div>
-                            <div class="map-point" style="top: 70%; left: 30%;">
-                                <div class="point-dot"></div>
-                                <div class="point-label">Казань<br><span class="point-value">8%</span></div>
-                            </div>
-                            <div class="map-point" style="top: 80%; left: 55%;">
-                                <div class="point-dot"></div>
-                                <div class="point-label">Краснодар<br><span class="point-value">5%</span></div>
-                            </div>
-                        </div>
+                <!-- Heatmap Card -->
+                <div class="dashboard-card">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-fire" style="color: var(--primary);"></i> Востребованные навыки (Пример: КАМ)</h3>
+                    <div class="heatmap-grid">
+                        <div class="h-cell lvl-5">B2B Продажи</div>
+                        <div class="h-cell lvl-5">Переговоры</div>
+                        <div class="h-cell lvl-4">Поиск клиентов</div>
+                        <div class="h-cell lvl-4">CRM</div>
+                        <div class="h-cell lvl-5">Холодные звонки</div>
+                        
+                        <div class="h-cell lvl-3">Документооборот</div>
+                        <div class="h-cell lvl-3">Excel</div>
+                        <div class="h-cell lvl-4">Презентации</div>
+                        <div class="h-cell lvl-2">Английский</div>
+                        <div class="h-cell lvl-3">Закрытие сделок</div>
+                        
+                        <div class="h-cell lvl-2">Логистика</div>
+                        <div class="h-cell lvl-2">Маркетинг</div>
+                        <div class="h-cell lvl-1">1С</div>
+                        <div class="h-cell lvl-2">Тендеры</div>
+                        <div class="h-cell lvl-3">Дебиторка</div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Benefits -->
-    <section class="benefits">
-        <div class="container">
-            <h2 class="section-title fade-in">Преимущества</h2>
-            <div class="benefits-container">
-                <div class="benefits-content fade-in">
-                    <ul class="benefit-list">
-                        <li class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Автоочистка данных перед каждым запросом</span>
+
+                <!-- Geo Card -->
+                <div class="dashboard-card">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Где платят больше?</h3>
+                    <ul class="region-list">
+                        <li class="region-item">
+                            <span class="region-name"><i class="fas fa-circle"></i> Москва</span>
+                            <span class="region-val">150k+</span>
                         </li>
-                        <li class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Авторасчет формул в Google Таблицах</span>
+                        <li class="region-item">
+                            <span class="region-name"><i class="fas fa-circle"></i> С-Петербург</span>
+                            <span class="region-val">110k+</span>
                         </li>
-                        <li class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Обновление резюме на основе реальных данных рынка</span>
+                        <li class="region-item">
+                            <span class="region-name"><i class="fas fa-circle"></i> Удаленно</span>
+                            <span class="region-val">90k+</span>
                         </li>
-                        <li class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Анализ зарплат в различных валютах</span>
-                        </li>
-                        <li class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Анализ частотности скиллов в реальном времени</span>
-                        </li>
-                        <li class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Бесплатный n8n-шаблон</span>
+                        <li class="region-item">
+                            <span class="region-name"><i class="fas fa-circle"></i> Екатеринбург</span>
+                            <span class="region-val">85k+</span>
                         </li>
                     </ul>
-                    <p>Автоматически собирает требуемые навыки из вакансий и показывает, на что обращают внимание HR при подборе кандидатов. Собираешь интересующую тебя профессию — получаешь самые востребованные скиллы в реальном времени. Обновляешь свое резюме на основе реальных данных рынка труда.</p>
                 </div>
-                <div class="benefits-image fade-in">
-                    <div class="benefits-image-inner">
-                        <i class="fas fa-file-excel"></i>
-                    </div>
-                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta">
+    <!-- Benefits Section (Восстановлено) -->
+    <section class="benefits">
         <div class="container">
-            <h2 class="cta-title fade-in">Готовы начать анализ вакансий HeadHunter?</h2>
-            <p class="cta-desc fade-in">Получите бесплатный n8n-шаблон для анализа трендовых скиллов, анализа зарплат, частотности по городам и опыту. Интеграция с Telegram и Google Sheets уже включена! Автоматически собирайте данные с HeadHunter и принимайте обоснованные карьерные решения.</p>
-            <a href="https://t.me/+dYrSdVlDfNM5ZTJi" target="_blank" class="btn fade-in">
-                Получить шаблон <i class="fas fa-arrow-right"></i>
-            </a>
+            <h2 class="section-title">Преимущества шаблона</h2>
+            <div class="benefits-wrapper">
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <div class="benefit-text">
+                            <h4>Автоочистка данных</h4>
+                            <p>Таблица автоматически очищается перед каждым новым запросом. Никакой путаницы.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <div class="benefit-text">
+                            <h4>Готовые формулы</h4>
+                            <p>В Google Sheets уже прописаны все формулы для расчета аналитики.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <div class="benefit-text">
+                            <h4>Для любой валюты</h4>
+                            <p>Корректный пересчет зарплат, указанных в долларах или евро.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <div class="benefit-text">
+                            <h4>Бесплатный n8n шаблон</h4>
+                            <p>Полностью открытый код автоматизации. Кастомизируйте под себя.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="benefits-visual">
+                    <div class="sheet-mockup">
+                        <div class="sheet-line" style="background: #fff; width: 30%;"></div>
+                        <div class="sheet-line"></div>
+                        <div class="sheet-line"></div>
+                        <div class="sheet-line"></div>
+                        <div class="sheet-line"></div>
+                        <div style="margin-top: auto; color: var(--success); font-family: 'Orbitron'; text-align: right;">ANALYSIS COMPLETE</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-links">
-                <a href="#" class="footer-link">Документация</a>
-                <a href="#" class="footer-link">Поддержка</a>
-                <a href="#" class="footer-link">Контакты</a>
+            <div class="logo" style="justify-content: center; margin-bottom: 20px; font-size: 1.2rem;">
+                <i class="fas fa-radar"></i> HH Radar
             </div>
-            <p class="copyright">© 2023 headHunter - Radar. Все права защищены.</p>
+            <div class="footer-cta">
+                <a href="https://t.me/+dYrSdVlDfNM5ZTJi" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-telegram-plane"></i> Получить шаблон в Telegram
+                </a>
+            </div>
+            <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">© 2024 HeadHunter Radar Analytics. Open Source Template.</p>
         </div>
     </footer>
 
     <script>
-        // Animation on scroll
-        document.addEventListener('DOMContentLoaded', function() {
-            const fadeElements = document.querySelectorAll('.fade-in');
+        document.addEventListener('DOMContentLoaded', () => {
             
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('appear');
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            fadeElements.forEach(element => {
-                observer.observe(element);
-            });
-            
-            // Add delay for staggered animation
-            fadeElements.forEach((element, index) => {
-                element.style.transitionDelay = `${index * 0.1}s`;
-            });
-            
-            // Radar animation
             const radar = document.getElementById('radar');
-            if (radar) {
-                setInterval(() => {
-                    // Rotate radar effect
-                    const circles = document.querySelectorAll('.radar-circle');
-                    circles.forEach((circle, index) => {
-                        circle.style.transform = `scale(${1 + (Math.sin(Date.now()/1000 + index) * 0.1)})`;
-                    });
-                }, 100);
-            }
-            
-            // Animate chart bars when they come into view
-            const chartBars = document.querySelectorAll('.chart-bar');
-            const chartObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animationPlayState = 'running';
-                    }
-                });
-            }, {
-                threshold: 0.5
-            });
-            
-            chartBars.forEach(bar => {
-                bar.style.animationPlayState = 'paused';
-                chartObserver.observe(bar);
-            });
-            
-            // Generate floating particles
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Random size between 2px and 4px
-                const size = Math.random() * 2 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Random position
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Random animation duration between 10s and 20s
-                const duration = Math.random() * 10 + 10;
-                particle.style.animationDuration = `${duration}s`;
-                
-                // Random animation delay
-                const delay = Math.random() * 5;
-                particle.style.animationDelay = `${delay}s`;
-                
-                particlesContainer.appendChild(particle);
-            }
-            
-            // Add interactive mouse move effect
             document.addEventListener('mousemove', (e) => {
-                const radar = document.querySelector('.radar');
-                if (!radar) return;
-                
-                const rect = radar.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * 180 / Math.PI;
-                
-                // Add subtle rotation effect to radar based on mouse position
-                radar.style.transform = `rotate(${angle * 0.05}deg)`;
+                if(window.innerWidth > 768) {
+                    const x = (window.innerWidth / 2 - e.pageX) / 30; // Уменьшил чувствительность
+                    const y = (window.innerHeight / 2 - e.pageY) / 30;
+                    radar.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
+                }
             });
-            
-            // Animate progress bars when they come into view
-            const progressBars = document.querySelectorAll('.progress-fill');
-            const progressObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const targetWidth = entry.target.style.width;
-                        entry.target.style.width = '0';
-                        setTimeout(() => {
-                            entry.target.style.width = targetWidth;
-                        }, 300);
-                    }
-                });
-            }, {
-                threshold: 0.5
-            });
-            
-            progressBars.forEach(bar => {
-                progressObserver.observe(bar);
-            });
-            
-            // Animate heatmap cells
-            const heatmapCells = document.querySelectorAll('.heatmap-cell');
-            heatmapCells.forEach((cell, index) => {
-                // Add staggered animation delays
-                cell.style.opacity = '0';
-                cell.style.transform = 'scale(0.8)';
-                cell.style.transition = 'all 0.5s ease';
-                
+
+            const markers = document.querySelectorAll('.radar-marker');
+            setInterval(() => {
+                const randomIdx = Math.floor(Math.random() * markers.length);
+                const marker = markers[randomIdx];
+                marker.classList.add('active');
                 setTimeout(() => {
-                    cell.style.opacity = '1';
-                    cell.style.transform = 'scale(1)';
-                }, 200 + (index * 50));
-            });
+                    marker.classList.remove('active');
+                }, 2000);
+            }, 3000);
         });
     </script>
 </body>
